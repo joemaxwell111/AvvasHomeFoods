@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Avva's Home Foods</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css?v=3">
+    <link rel="stylesheet" href="css/cursor.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient-hero);
+            padding: 20px;
+        }
+
+        .auth-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--card-radius);
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: var(--shadow-lg);
+            backdrop-filter: var(--glass-blur);
+            transition: var(--transition-normal);
+        }
+
+        @media (max-width: 480px) {
+            .auth-card {
+                padding: 30px 20px;
+            }
+
+            .auth-title {
+                font-size: 1.75rem;
+            }
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .auth-logo {
+            height: 60px;
+            margin-bottom: 15px;
+        }
+
+        .auth-title {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .auth-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-light);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            transition: var(--transition-fast);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px var(--primary-glow);
+        }
+
+        .auth-footer {
+            margin-top: 24px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .auth-link {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+            display: none;
+            text-align: center;
+        }
+
+        .separator {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 20px 0;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .separator::before,
+        .separator::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .separator:not(:empty)::before {
+            margin-right: .25em;
+        }
+
+        .separator:not(:empty)::after {
+            margin-left: .25em;
+        }
+
+        .btn-google {
+            background: white;
+            color: #333;
+            border: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .btn-google:hover {
+            background: #f8f8f8;
+            border-color: #ccc;
+        }
+
+        #google-signup-button {
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Custom Cursor -->
+    <div class="cursor">
+        <svg viewBox="0 0 100 100" class="cursor-shape">
+            <path d="M50 5 L90 90 L50 70 L10 90 Z" fill="none" stroke="#c8962e" stroke-width="5" stroke-linejoin="round"
+                stroke-linecap="round" />
+        </svg>
+    </div>
+
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div
+                    style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
+                    <img src="images/logo.png" alt="Logo" class="auth-logo" style="margin-bottom: 0; height: 45px;">
+                    <span class="logo-text" style="font-size: 1.5rem;">Avva's <span class="highlight">Home
+                            Foods</span></span>
+                </div>
+                <h1 class="auth-title">Create Account</h1>
+                <p class="auth-subtitle">Join us for authentic homemade flavors</p>
+            </div>
+
+            <div id="google-signup-button"></div>
+
+            <div class="separator">OR</div>
+
+            <form id="signupForm">
+                <div class="error-message" id="signupError">Error registering user</div>
+
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-input" id="fullName" required placeholder="e.g. John Doe">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Email Address (Username)</label>
+                    <input type="email" class="form-input" id="signupEmail" required placeholder="name@example.com">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" id="signupPassword" required placeholder="••••••••">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Confirm Password</label>
+                    <input type="password" class="form-input" id="confirmPassword" required placeholder="••••••••">
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full btn-lg">Create Account</button>
+            </form>
+
+            <div class="auth-footer" style="margin-top: 20px;">
+                Already have an account? <a href="login.html" class="auth-link">Login here</a>
+            </div>
+
+            <div class="auth-footer" style="margin-top: 10px;">
+                <a href="index.html" class="auth-link">← Back to Home</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8080/api/auth';
+
+        // Initialize Google Sign-In
+        window.onload = async function () {
+            try {
+                const configRes = await fetch(`${API_BASE}/google-client-id`);
+                const { clientId } = await configRes.json();
+
+                if (!clientId) throw new Error('Client ID not found');
+
+                google.accounts.id.initialize({
+                    client_id: clientId,
+                    callback: handleGoogleSignUp
+                });
+
+                const buttonWidth = window.innerWidth < 400 ? window.innerWidth - 80 : 350;
+
+                google.accounts.id.renderButton(
+                    document.getElementById('google-signup-button'),
+                    {
+                        theme: 'outline',
+                        size: 'large',
+                        width: buttonWidth,
+                        text: 'signup_with'
+                    }
+                );
+            } catch (error) {
+                console.error('Error loading Google config:', error);
+            }
+        };
+
+        async function handleGoogleSignUp(response) {
+            const errorDiv = document.getElementById('signupError');
+            errorDiv.style.display = 'none';
+
+            try {
+                const res = await fetch(`${API_BASE}/google-login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ credential: response.credential })
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    localStorage.setItem('user', JSON.stringify(data));
+                    window.location.href = 'index.html';
+                } else {
+                    const errorText = await res.text();
+                    errorDiv.textContent = errorText || 'Google Sign-Up failed';
+                    errorDiv.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Google Sign-Up error:', error);
+                errorDiv.textContent = 'Error connecting to server';
+                errorDiv.style.display = 'block';
+            }
+        }
+
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('fullName').value;
+            const username = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const errorDiv = document.getElementById('signupError');
+
+            errorDiv.style.display = 'none';
+
+            if (password !== confirmPassword) {
+                errorDiv.textContent = 'Passwords do not match!';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password,
+                        name: name
+                    })
+                });
+
+                if (response.ok) {
+                    // alert('Registration Successful! Please login.');
+                    window.location.href = 'login.html';
+                } else {
+                    const errorText = await response.text();
+                    errorDiv.textContent = errorText || 'Registration failed. Try a different email.';
+                    errorDiv.style.display = 'block';
+                }
+            } catch (error) {
+                console.error(error);
+                errorDiv.textContent = 'Server error. Please try again later.';
+                errorDiv.style.display = 'block';
+            }
+        });
+    </script>
+    <script src="js/cursor.js"></script>
+</body>
+
+</html>

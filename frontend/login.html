@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Avva's Home Foods</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css?v=3">
+    <link rel="stylesheet" href="css/cursor.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient-hero);
+            padding: 20px;
+        }
+
+        .auth-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--card-radius);
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: var(--shadow-lg);
+            backdrop-filter: var(--glass-blur);
+            transition: var(--transition-normal);
+        }
+
+        @media (max-width: 480px) {
+            .auth-card {
+                padding: 30px 20px;
+            }
+
+            .auth-title {
+                font-size: 1.75rem;
+            }
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .auth-logo {
+            height: 60px;
+            margin-bottom: 15px;
+        }
+
+        .auth-title {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .auth-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-light);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            transition: var(--transition-fast);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px var(--primary-glow);
+        }
+
+        .auth-footer {
+            margin-top: 24px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .auth-link {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+            display: none;
+            text-align: center;
+        }
+
+        #google-signin-button {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Custom Cursor -->
+    <div class="cursor">
+        <svg viewBox="0 0 100 100" class="cursor-shape">
+            <path d="M50 5 L90 90 L50 70 L10 90 Z" fill="none" stroke="#c8962e" stroke-width="5" stroke-linejoin="round"
+                stroke-linecap="round" />
+        </svg>
+    </div>
+
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div
+                    style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
+                    <img src="images/logo.png" alt="Logo" class="auth-logo" style="margin-bottom: 0; height: 45px;">
+                    <span class="logo-text" style="font-size: 1.5rem;">Avva's <span class="highlight">Home
+                            Foods</span></span>
+                </div>
+                <h1 class="auth-title">Login</h1>
+                <p class="auth-subtitle">Login to manage products and order history</p>
+            </div>
+
+            <div id="google-signin-button"></div>
+
+            <div
+                style="display: flex; align-items: center; text-align: center; margin: 20px 0; color: var(--text-secondary); font-size: 0.85rem;">
+                <div style="flex: 1; border-bottom: 1px solid var(--border-light);"></div>
+                <span style="padding: 0 10px;">OR</span>
+                <div style="flex: 1; border-bottom: 1px solid var(--border-light);"></div>
+            </div>
+
+            <form id="loginForm">
+                <div class="error-message" id="loginError">Invalid username or password</div>
+
+                <div class="form-group">
+                    <label class="form-label">Email / Username</label>
+                    <input type="text" class="form-input" id="username" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" id="password" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full btn-lg">Login</button>
+            </form>
+
+            <div class="auth-footer" style="margin-top: 20px;">
+                New to Avva's? <a href="signup.html" class="auth-link">Create an account</a>
+            </div>
+
+            <div class="auth-footer" style="margin-top: 10px;">
+                <a href="index.html" class="auth-link">← Back to Home</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8080/api/auth';
+
+        // Initialize Google Sign-In
+        window.onload = async function () {
+            try {
+                const configRes = await fetch(`${API_BASE}/google-client-id`);
+                const { clientId } = await configRes.json();
+
+                if (!clientId) throw new Error('Client ID not found');
+
+                google.accounts.id.initialize({
+                    client_id: clientId,
+                    callback: handleGoogleSignIn
+                });
+
+                const buttonWidth = window.innerWidth < 400 ? window.innerWidth - 80 : 350;
+
+                google.accounts.id.renderButton(
+                    document.getElementById('google-signin-button'),
+                    {
+                        theme: 'outline',
+                        size: 'large',
+                        width: buttonWidth,
+                        text: 'signin_with'
+                    }
+                );
+            } catch (error) {
+                console.error('Error loading Google config:', error);
+            }
+        };
+
+        async function handleGoogleSignIn(response) {
+            const errorDiv = document.getElementById('loginError');
+            errorDiv.style.display = 'none';
+
+            try {
+                const res = await fetch(`${API_BASE}/google-login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ credential: response.credential })
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    localStorage.setItem('user', JSON.stringify(data));
+                    window.location.href = 'index.html';
+                } else {
+                    const errorText = await res.text();
+                    errorDiv.textContent = errorText || 'Google Sign-In failed';
+                    errorDiv.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Google Sign-In error:', error);
+                errorDiv.textContent = 'Error connecting to server';
+                errorDiv.style.display = 'block';
+            }
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('loginError');
+
+            errorDiv.style.display = 'none';
+
+            try {
+                const response = await fetch(`${API_BASE}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+
+                    // Role check removed to allow all users
+                    /*
+                    if (data.role !== 'ADMIN') {
+                        errorDiv.textContent = 'Access Denied: Not an Admin';
+                        errorDiv.style.display = 'block';
+                        return;
+                    } 
+                    */
+
+                    localStorage.setItem('user', JSON.stringify(data));
+                    // alert('Admin Login Successful!');
+                    window.location.href = 'index.html';
+                } else {
+                    errorDiv.textContent = 'Invalid username or password';
+                    errorDiv.style.display = 'block';
+                }
+            } catch (error) {
+                errorDiv.textContent = 'Login failed. Check backend.';
+                errorDiv.style.display = 'block';
+            }
+        });
+
+        // Registration logic removed per user request
+    </script>
+    <script src="js/cursor.js"></script>
+</body>
+
+</html>

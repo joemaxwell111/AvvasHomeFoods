@@ -1,0 +1,36 @@
+/* Cursor wrapper */
+.cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+}
+
+/* SVG full size */
+.cursor-shape {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 10px rgba(200, 150, 46, 0.4));
+    /* Gold glow */
+}
+
+/* Hide default cursor on body */
+body {
+    cursor: none;
+}
+
+/* Ensure links and buttons show the custom cursor pointer if needed, 
+   but generally we want the custom cursor everywhere. 
+   If elements force a cursor, we might need to override. */
+a,
+button,
+.btn,
+input,
+select,
+textarea {
+    cursor: none;
+}

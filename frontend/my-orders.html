@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders | Avva's Home Foods</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css?v=3">
+    <link rel="stylesheet" href="css/cursor.css">
+    <style>
+        .my-orders-section {
+            padding: 120px 0 60px;
+            min-height: 80vh;
+        }
+
+        .page-title {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .orders-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .order-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--card-radius);
+            padding: 24px;
+            margin-bottom: 24px;
+            transition: var(--transition-normal);
+        }
+
+        .order-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .order-id {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            color: var(--text-primary);
+        }
+
+        .order-date {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-PENDING {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-PROCESSING {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .status-SHIPPED {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .status-DELIVERED {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-CANCELLED {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .order-items {
+            margin-bottom: 20px;
+        }
+
+        .order-item-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .order-item-name {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .order-total {
+            display: flex;
+            justify-content: flex-end;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-light);
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px;
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 600px) {
+            .order-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Custom Cursor -->
+    <div class="cursor">
+        <svg viewBox="0 0 100 100" class="cursor-shape">
+            <path d="M50 5 L90 90 L50 70 L10 90 Z" fill="none" stroke="#c8962e" stroke-width="5" stroke-linejoin="round"
+                stroke-linecap="round" />
+        </svg>
+    </div>
+
+    <!-- NAV -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="images/logo.png" alt="Avva's Home Foods Logo" class="nav-logo-img">
+                <span class="logo-text">Avva's <span class="highlight">Home Foods</span></span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="order.html">Order</a></li>
+                <!-- My Orders Link inserted via JS if logged in -->
+            </ul>
+            <div class="nav-actions">
+                <div id="authActions">
+                    <a href="login.html" class="btn btn-primary btn-sm" id="loginBtn">Sign In</a>
+                </div>
+                <!-- User Profile Dropdown (Hidden by default) -->
+                <div id="userProfile" style="display: none; position: relative;">
+                    <div style="cursor: pointer; display: flex; align-items: center; gap: 8px;"
+                        onclick="toggleProfileMenu()">
+                        <span id="userNameDisplay" style="font-weight: 600;">User</span>
+                        <span>logout</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-orders-section">
+        <h1 class="page-title">My Orders</h1>
+
+        <div id="loading" style="text-align: center;">Loading your orders...</div>
+
+        <div class="orders-container" id="ordersList">
+            <!-- Populated via JS -->
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 Avva's Home Foods. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+    <script>
+        const API_ORDERS = 'http://localhost:8080/api/orders';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Auth check
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user) {
+                alert('Please sign in to view your orders');
+                window.location.href = 'signup.html';
+                return;
+            }
+
+            // Adjust Nav for logged in user (similar to app.js logic but inline for simplicity on new page)
+            const authActions = document.getElementById('authActions');
+            const userProfile = document.getElementById('userProfile');
+            const userNameDisplay = document.getElementById('userNameDisplay');
+
+            if (authActions) authActions.style.display = 'none';
+            if (userProfile) {
+                userProfile.style.display = 'block';
+                userNameDisplay.textContent = user.name;
+            }
+
+            // Load Orders — use email (user.email), fallback to user.username
+            const email = user.email || user.username;
+            if (!email) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('ordersList').innerHTML = `
+                    <div class="empty-state">
+                        <span class="empty-icon">⚠️</span>
+                        <h3>Email not found</h3>
+                        <p>Your account doesn't have an email linked. Please sign in again.</p>
+                        <a href="signup.html" class="btn btn-primary" style="margin-top: 20px;">Sign up</a>
+                    </div>
+                `;
+                return;
+            }
+            loadMyOrders(email);
+        });
+
+        async function loadMyOrders(email) {
+            // Always load local fallback orders first
+            const localOrders = JSON.parse(localStorage.getItem('avvaLocalOrders') || '[]')
+                .filter(o => o.email === email);
+
+            try {
+                const res = await fetch(`${API_ORDERS}/my-orders?email=${encodeURIComponent(email)}`);
+                if (res.ok) {
+                    const backendOrders = await res.json();
+                    // Merge: backend orders take priority, add local ones not in backend
+                    const backendIds = new Set(backendOrders.map(o => o.id));
+                    const merged = [...backendOrders, ...localOrders.filter(o => !backendIds.has(o.id))];
+                    // Sort by date descending
+                    merged.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                    renderOrders(merged);
+                } else {
+                    // Backend error — show local orders only
+                    renderOrders(localOrders);
+                }
+            } catch (e) {
+                console.error(e);
+                // Backend offline — show local orders only
+                if (localOrders.length > 0) {
+                    renderOrders(localOrders);
+                } else {
+                    document.getElementById('ordersList').innerHTML = `
+                        <div class="empty-state">
+                            <span class="empty-icon">🔌</span>
+                            <h3>Cannot connect to server</h3>
+                            <p>Make sure the backend is running on port 8080.</p>
+                        </div>
+                    `;
+                }
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+
+        function renderOrders(orders) {
+            const container = document.getElementById('ordersList');
+
+            if (!orders || orders.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <span class="empty-icon">📦</span>
+                        <h3>No orders found</h3>
+                        <p>Looks like you haven't placed any orders yet.</p>
+                        <a href="products.html" class="btn btn-primary" style="margin-top: 20px;">Start Shopping</a>
+                    </div>
+                `;
+                return;
+            }
+
+            // Sort by date desc (if not already)
+            // orders.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+            container.innerHTML = orders.map(order => {
+                const date = new Date(order.createdAt).toLocaleDateString('en-US', {
+                    year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
+                });
+
+                const itemsHtml = order.items.map(item => `
+                    <div class="order-item-row">
+                        <span class="order-item-name">${item.productName} (x${item.quantity})</span>
+                        <span>₹${item.price * item.quantity}</span>
+                    </div>
+                `).join('');
+
+                return `
+                    <div class="order-card">
+                        <div class="order-header">
+                            <div>
+                                <div class="order-id">Order #${order.id.slice(-6).toUpperCase()}</div>
+                                <div class="order-date">${date}</div>
+                            </div>
+                            <span class="status-badge status-${order.status}">${order.status}</span>
+                        </div>
+                        
+                        <div class="order-items">
+                            ${itemsHtml}
+                        </div>
+                        
+                        <div class="order-total">
+                            Total: ₹${order.totalAmount}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function toggleProfileMenu() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (user && user.role === 'ADMIN') {
+                window.location.href = 'admin.html';
+            } else {
+                // Instant logout — no confirm popup
+                localStorage.removeItem('user');
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
+    <script src="js/cursor.js"></script>
+</body>
+
+</html>

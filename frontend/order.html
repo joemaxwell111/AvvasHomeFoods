@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order | Avva's Home Foods</title>
+    <meta name="description"
+        content="Place your order for fresh, traditional homemade masalas. Easy checkout with Cash on Delivery.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css?v=3">
+    <link rel="stylesheet" href="css/cursor.css">
+</head>
+
+<body>
+
+    <!-- Custom Cursor -->
+    <div class="cursor">
+        <svg viewBox="0 0 100 100" class="cursor-shape">
+            <path d="M50 5 L90 90 L50 70 L10 90 Z" fill="none" stroke="#c8962e" stroke-width="5" stroke-linejoin="round"
+                stroke-linecap="round" />
+        </svg>
+    </div>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="images/logo.png" alt="Avva's Home Foods Logo" class="nav-logo-img">
+                <span class="logo-text">Avva's <span class="highlight">Home Foods</span></span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="order.html" class="active">Order</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+            <div class="nav-actions">
+                <!-- Theme toggle removed to enforce Premium Dark Theme -->
+                <div id="authActions">
+                    <a href="signup.html" class="btn btn-primary btn-sm" id="loginBtn">Sign up</a>
+                </div>
+                <!-- User Profile Dropdown (Hidden by default) -->
+                <div id="userProfile" style="display: none;">
+                    <span id="userName" style="margin-right: 10px; font-weight: 500;">User</span>
+                    <button id="logoutBtn" class="btn btn-outline btn-sm">Logout</button>
+                </div>
+                <a href="order.html" class="cart-btn" id="cartBtn">
+                    <span class="cart-icon">🛒</span>
+                    <span class="cart-count" id="cartCount">0</span>
+                </a>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ==================== PAGE HEADER ==================== -->
+    <section class="page-header">
+        <div class="container">
+            <span class="section-tag">Checkout</span>
+            <h1 class="page-title">Your <span class="highlight">Order</span></h1>
+            <p class="page-subtitle">Review your cart and complete your order</p>
+        </div>
+    </section>
+
+    <!-- ==================== ORDER CONTENT ==================== -->
+    <section class="section order-section">
+        <div class="container">
+            <div class="order-grid">
+                <!-- Cart Items -->
+                <div class="order-cart">
+                    <div class="order-card">
+                        <h3 class="order-card-title">🛒 Cart Items</h3>
+                        <div class="cart-items" id="cartItems">
+                            <!-- Cart items loaded via JS -->
+                        </div>
+                        <div class="cart-empty" id="cartEmpty">
+                            <div class="empty-icon">🛒</div>
+                            <h3>Your cart is empty</h3>
+                            <p>Add some delicious masalas to get started!</p>
+                            <a href="products.html" class="btn btn-primary">Browse Products</a>
+                        </div>
+                        <div class="cart-summary" id="cartSummary" style="display: none;">
+                            <div class="summary-row">
+                                <span>Subtotal</span>
+                                <span id="subtotal">₹0</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Delivery</span>
+                                <span id="deliveryCharge">₹50</span>
+                            </div>
+                            <div class="summary-row summary-total">
+                                <span>Total</span>
+                                <span id="totalAmount">₹0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Form -->
+                <div class="order-form-wrapper" id="orderFormWrapper">
+                    <div class="order-card">
+                        <h3 class="order-card-title">📝 Delivery Details</h3>
+                        <form class="order-form" id="orderForm">
+                            <div class="form-group">
+                                <label for="customerName">Full Name *</label>
+                                <input type="text" id="customerName" name="customerName"
+                                    placeholder="Enter your full name" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="email">Email *</label>
+                                    <input type="email" id="email" name="email" placeholder="your@email.com" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Phone Number *</label>
+                                    <input type="tel" id="phone" name="phone" placeholder="Enter 10-digit number"
+                                        required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="address">Delivery Address *</label>
+                                <textarea id="address" name="address" rows="3" placeholder="Enter your full address"
+                                    required></textarea>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="city">City *</label>
+                                    <input type="text" id="city" name="city" placeholder="City" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="pincode">Pincode *</label>
+                                    <input type="text" id="pincode" name="pincode" placeholder="6-digit pincode"
+                                        required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Payment Method</label>
+                                <div class="payment-options">
+                                    <label class="payment-option">
+                                        <input type="radio" name="paymentMethod" value="COD" checked>
+                                        <span class="payment-label">
+                                            <span class="payment-icon">💵</span>
+                                            <span>Cash on Delivery</span>
+                                        </span>
+                                    </label>
+                                    <label class="payment-option">
+                                        <input type="radio" name="paymentMethod" value="UPI">
+                                        <span class="payment-label">
+                                            <span class="payment-icon">📱</span>
+                                            <span>UPI Payment</span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-lg btn-full" id="placeOrderBtn">
+                                <span>Place Order</span>
+                                <span class="btn-arrow">→</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== ORDER SUCCESS MODAL ==================== -->
+    <div class="modal-overlay" id="orderSuccessModal">
+        <div class="modal-card">
+            <div class="modal-icon">🎉</div>
+            <h2>Order Placed Successfully!</h2>
+            <p class="modal-text">Thank you for your order. We'll prepare your fresh masalas and deliver them soon.</p>
+            <div class="modal-order-id">
+                Order ID: <strong id="modalOrderId">#AVH-001</strong>
+            </div>
+            <p class="modal-note">You will receive a confirmation on WhatsApp shortly.</p>
+            <div class="modal-actions">
+                <a href="index.html" class="btn btn-primary">Back to Home</a>
+                <a href="products.html" class="btn btn-outline">Continue Shopping</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="nav-logo" style="margin-bottom: 16px;">
+                        <img src="images/logo.png" alt="Avva's Home Foods Logo" class="nav-logo-img">
+                        <span class="logo-text">Avva's <span class="highlight">Home Foods</span></span>
+                    </a>
+                    <p>Traditional homemade masalas made with love and tradition.</p>
+                    <div class="footer-social">
+                        <a href="https://www.instagram.com/avvashomefoods" target="_blank" class="social-link">📸
+                            Instagram</a>
+                        <a href="https://wa.me/919600215761" target="_blank" class="social-link">💬 WhatsApp</a>
+                    </div>
+                </div>
+                <div class="footer-links-col">
+                    <h4>Quick Links</h4>
+                    <a href="index.html">Home</a>
+                    <a href="products.html">Products</a>
+                    <a href="order.html">Order</a>
+                    <a href="index.html#about">About Us</a>
+                </div>
+                <div class="footer-links-col">
+                    <h4>Categories</h4>
+                    <a href="products.html">Masala Powders</a>
+                    <a href="products.html">Pure Spices</a>
+                    <a href="products.html">Special Blends</a>
+                </div>
+                <div class="footer-links-col">
+                    <h4>Contact Us</h4>
+                    <p>📞 9600215761</p>
+                    <p>📸 @avvashomefoods</p>
+                    <p>📍 Puducherry</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Avva's Home Foods. All rights reserved. Made with ❤️</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+    <script src="js/cursor.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCartPage();
+        });
+    </script>
+</body>
+
+</html>
